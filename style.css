@@ -1,0 +1,59 @@
+body{
+  margin:0;
+  padding:0;
+  background:#111;
+  font-family:Arial;
+  color:white;
+}
+
+.container{
+  width:90%;
+  max-width:400px;
+  margin:auto;
+  text-align:center;
+  margin-top:80px;
+}
+
+#mainTitle{
+  font-size:45px;
+  margin-bottom:40px;
+  cursor:pointer;
+}
+
+.buttons button,
+.form-box button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  background:#00b894;
+  color:white;
+  font-size:16px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.form-box{
+  display:none;
+  margin-top:20px;
+}
+
+.form-box input{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+}
+
+.otp-box{
+  margin-top:10px;
+}
+
+#otpDisplay{
+  display:block;
+  margin-top:10px;
+  color:yellow;
+  font-size:20px;
+}
