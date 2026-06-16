@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-System Lottery Analytics Engine</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #loginPanel { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
+        #mainContainer { display: none; }
+        
+        /* Options Tab System */
+        .tabs-container {
+            grid-column: span 2;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 15px;
+            background: #e0e0e0;
+            color: #333;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .tab-btn.active {
+            background: #1a237e;
+            color: white;
+        }
+        .header-container {
+            grid-column: span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a237e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 8px 15px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; width: auto; }
+        .logout-btn:hover { background: #c82333; }
+        .alpha-input { text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+<div id="loginPanel" class="container">
+    <div class="panel" style="width: 300px; text-align: center;">
+        <h3>🔒 Secure Login</h3>
+        <input type="password" id="passwordInput" placeholder="Enter Password" style="margin-bottom: 10px;" onkeypress="handleKeyPress(event)">
+        <button onclick="checkLogin()">LOGIN</button>
+        <p id="errorMsg" style="color: red; font-size: 12px; margin-top: 5px;"></p>
+    </div>
+</div>
+
+<div id="mainContainer" class="container">
+    <div class="header-container">
+        <h2 style="margin: 0; font-size: 20px;">🎯 Multi-System Lottery Analytics Engine</h2>
+        <button class="logout-btn" onclick="logout()">Logout 🚪</button>
+    </div>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchSystem(1)">Option 1 (3-Digit)</button>
+        <button class="tab-btn" onclick="switchSystem(2)">Option 2 (3-Digit)</button>
+        <button class="tab-btn" onclick="switchSystem(3)">Option 3 (3-Digit)</button>
+        <button class="tab-btn" onclick="switchSystem(4) ?? ''">Option 4 (3-Digit)</button>
+        <button class="tab-btn" onclick="switchSystem(5)">Option 5 (8-Digit 🚀)</button>
+    </div>
+
+    <div class="panel" id="inputPanel">
+        <h3 id="formTitle">1. Data Input (System 1)</h3>
+        <form id="lotteryForm">
+            <div class="form-group">
+                <label>Date (தேதி)</label>
+                <input type="date" id="gameDate" required>
+            </div>
+            <div class="form-group">
+                <label>Time (நேரம்)</label>
+                <input type="time" id="gameTime" required>
+            </div>
+            <div class="form-group">
+                <label>Game Number (கேம் எண்)</label>
+                <input type="number" id="gameId" placeholder="Ex: 01, 02" required>
+            </div>
+            
+            <div class="form-group">
+                <label id="inputLabel">3-Digit Number (மூன்றிலக்க எண்)</label>
+                <div id="dynamicInputContainer">
+                    </div>
+            </div>
+            
+            <button type="submit" id="submitBtn">SAVE & ANALYZE</button>
+            <button type="button" class="clear-btn" onclick="clearSystemData()">RESET CURRENT OPTION DATABASE</button>
+        </form>
+    </div>
+
+    <div class="results-panel">
+        <div class="panel"><h3>🔮 AI Smart Guesses</h3>
+            <div class="prediction-box" id="predictionContainer"></div>
+        </div>
+        <div class="panel"><h3>⚡ Pattern Discovery Engine</h3>
+            <div id="patternAnalysis" class="scrollable"></div>
+        </div>
+        <div class="panel"><h3>📊 Saved Database (<span id="dbTitle">Option 1</span>)</h3>
+            <div class="scrollable">
+                <table class="grid-table">
+                    <thead id="tableHeader">
+                        </thead>
+                    <tbody id="dataTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    let logoutTimer;
+    const INACTIVITY_LIMIT = 10 * 60 * 1000;
+
+    function handleKeyPress(event) { if (event.key === "Enter") { checkLogin(); } }
+
+    function checkLogin() {
+        const pass = document.getElementById('passwordInput').value;
+        if(pass === "16111996") {
+            document.getElementById('loginPanel').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'grid';
+            document.getElementById('passwordInput').value = "";
+            document.getElementById('errorMsg').innerText = "";
+            startInactivityTimer();
+            switchSystem(1); // Default Load System 1
+        } else {
+            document.getElementById('errorMsg').innerText = "❌ தவறான கடவுச்சொல்!";
+        }
+    }
+
+    function logout() {
+        clearTimeout(logoutTimer);
+        document.getElementById('mainContainer').style.display = 'none';
+        document.getElementById('loginPanel').style.display = 'flex';
+    }
+
+    function startInactivityTimer() {
+        window.onmousemove = resetInactivityTimer;
+        window.onmousedown = resetInactivityTimer;
+        window.ontouchstart = resetInactivityTimer;
+        window.onclick = resetInactivityTimer;     
+        window.onkeypress = resetInactivityTimer;   
+        setTimer();
+    }
+
+    function setTimer() {
+        logoutTimer = setTimeout(function() {
+            alert("⏰ 10 நிமிடங்கள் நீங்கள் வேலை செய்யாததால் ஆட்டோ லாகவுட் செய்யப்பட்டுள்ளது!");
+            logout();
+        }, INACTIVITY_LIMIT);
+    }
+
+    function resetInactivityTimer() {
+        clearTimeout(logoutTimer);
+        if (document.getElementById('mainContainer').style.display === 'grid') { setTimer(); }
+    }
+</script>
+</body>
+</html>
